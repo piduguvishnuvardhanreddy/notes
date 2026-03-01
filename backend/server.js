@@ -9,8 +9,17 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
+}));
 app.use(express.json());
+
+// Health check route (required for Render)
+app.get('/', (req, res) => {
+  res.json({ status: 'API is running' });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
