@@ -25,8 +25,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/notes', require('./routes/notes'));
 
-// 404 handler for unknown routes
-app.use('*', (req, res) => {
+// Catch-all for unknown routes (Express v5 compatible)
+app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.originalUrl} not found` });
 });
 
