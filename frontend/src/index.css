@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-customBg: #f4f7f6;
+  --color-customPrimary: #6366f1;
+  --color-customCard: #ffffff;
+}
 
 body {
   margin: 0;
@@ -9,18 +13,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f7f6;
+  background-color: var(--color-customBg);
   color: #333;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-/* React Quill Customizations */
-.ql-container {
-  font-size: 16px !important;
-  font-family: inherit !important;
-  min-height: 200px;
 }
