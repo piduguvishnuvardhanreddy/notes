@@ -8,22 +8,27 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+// CORS — allow all origins for API
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
 }));
 app.use(express.json());
 
-// Health check route (required for Render)
+// Health check route
 app.get('/', (req, res) => {
-  res.json({ status: 'API is running' });
+  res.json({ status: 'Notes API is running', version: '1.0.0' });
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/notes', require('./routes/notes'));
+
+// 404 handler for unknown routes
+app.use('*', (req, res) => {
+  res.status(404).json({ message: `Route ${req.originalUrl} not found` });
+});
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
