@@ -4,11 +4,19 @@ const auth = require('../middleware/authMiddleware');
 const Note = require('../models/Note');
 
 // @route   GET /api/notes
-// @desc    Get all notes for a user
+// @desc    Get all notes for a user (supports ?search= query param)
 // @access  Private
 router.get('/', auth, async (req, res) => {
     try {
-        const notes = await Note.find({ user: req.user.id }).sort({ createdAt: -1 });
+        const { search } = req.query;
+        const query = { user: req.user.id };
+
+        if (search && search.trim()) {
+            const regex = new RegExp(search.trim(), 'i');
+            query.$or = [{ title: regex }, { content: regex }];
+        }
+
+        const notes = await Note.find(query).sort({ createdAt: -1 });
         res.json(notes);
     } catch (error) {
         console.error(error);

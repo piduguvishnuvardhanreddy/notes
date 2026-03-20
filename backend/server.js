@@ -8,13 +8,23 @@ dotenv.config();
 
 const app = express();
 
-// CORS — allow all origins for API
-app.use(cors({
-  origin: '*',
+// CORS — allow specific origin (set ALLOWED_ORIGIN env var on Render to your Vercel URL)
+const allowedOrigin = process.env.ALLOWED_ORIGIN || '*';
+
+const corsOptions = {
+  origin: allowedOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
-}));
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests for all routes
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
+
 
 // Health check route
 app.get('/', (req, res) => {
